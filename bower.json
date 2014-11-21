@@ -1,0 +1,31 @@
+{
+  "name": "purescript-filterable",
+  "version": "0.0.0",
+  "authors": [
+    "Michael Ficarra <git@michael.ficarra.me>"
+  ],
+  "main": "lib/Data/Filterable.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "purescript",
+    "filterable",
+    "filter"
+  ],
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/michaelficarra/purescript-filterable",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "purescript-foldable-traversable": "~0.1.4",
+    "purescript-monoid": "*",
+    "purescript-tuples": "~0.2.2",
+    "purescript-maybe": "*"
+  }
+}
