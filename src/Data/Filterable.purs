@@ -2,7 +2,6 @@ module Data.Filterable (Filterable, cons, filter) where
 
 import Prelude ((:))
 import qualified Data.Foldable as Foldable
-import qualified Data.Maybe as Maybe
 import qualified Data.Monoid as Monoid -- TODO: Zero
 
 class Zero t where

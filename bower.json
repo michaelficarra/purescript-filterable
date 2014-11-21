@@ -24,8 +24,6 @@
   ],
   "dependencies": {
     "purescript-foldable-traversable": "~0.1.4",
-    "purescript-monoid": "*",
-    "purescript-tuples": "~0.2.2",
-    "purescript-maybe": "*"
+    "purescript-monoid": "*"
   }
 }
