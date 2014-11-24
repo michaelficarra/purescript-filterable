@@ -4,8 +4,9 @@
 
 ### Type Classes
 
-    class (Data.Foldable.Foldable t, Data.Filterable.Zero t) <= Filterable t where
-      cons :: forall a. a -> t a -> t a
+    class (Data.Foldable.Foldable t) <= Filterable t where
+      fzero :: forall a. t a
+      fcons :: forall a. a -> t a -> t a
 
 
 ### Values

@@ -23,7 +23,6 @@
     "tests"
   ],
   "dependencies": {
-    "purescript-foldable-traversable": "~0.1.4",
-    "purescript-monoid": "*"
+    "purescript-foldable-traversable": "~0.1.4"
   }
 }
