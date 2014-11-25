@@ -24,5 +24,8 @@
   ],
   "dependencies": {
     "purescript-foldable-traversable": "~0.1.4"
+  },
+  "devDependencies": {
+    "purescript-sets": "~0.1.0"
   }
 }
