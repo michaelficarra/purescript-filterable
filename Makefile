@@ -49,7 +49,7 @@ README.md: lib/$(MODULE_PATH).externs.purs
 built-tests/%.js: test/%.purs bower_components test-helper.purs
 	@mkdir -p '$(@D)'
 	$(PSC) --verbose-errors --module Tests \
-	  $(BOWER_DEPS) test-helper.purs '$<' \
+	  $(BOWER_DEPS) $(SRC) test-helper.purs '$<' \
 	  >'$@'
 
 node_modules:
