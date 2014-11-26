@@ -10,6 +10,7 @@ class Consable t where
 
   -- cons x xs /= xs
   -- cons x <<< cons x /= cons x
+  -- if x /= y then cons x <<< cons y /= cons y <<< cons x
   cons :: forall a. a -> t a -> t a
 
 class Filterable t where
