@@ -8,8 +8,8 @@ import Control.Plus (empty)
 class Consable t where
   czero :: forall a. t a
 
-  -- cons a xs /= xs
-  -- cons a <<< cons a /= cons a
+  -- cons x xs /= xs
+  -- cons x <<< cons x /= cons x
   cons :: forall a. a -> t a -> t a
 
 class Filterable t where
