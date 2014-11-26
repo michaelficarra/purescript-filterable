@@ -18,8 +18,7 @@ class Filterable t where
 
   -- filter (const false) == const fzero
   -- filter (const true) == id
-  -- filter pred == filter pred <<< filter pred
-  -- filter pred <<< filter (not pred) == filter (const false)
+  -- filter p0 <<< filter p1 == filter (\x -> p0 x && p1 x)
   filter :: forall a. (a -> Boolean) -> t a -> t a
 
 instance foldableFilterable :: (Foldable t, Consable t) => Filterable t where
