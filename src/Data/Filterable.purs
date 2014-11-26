@@ -1,19 +1,31 @@
-module Data.Filterable (Filterable, fzero, fcons, filter) where
+module Data.Filterable (Filterable, fzero, filter, Consable, czero, cons) where
 
-import Prelude ((:))
-import qualified Data.Foldable as Foldable
+import Prelude (Monad, return)
+import Data.Foldable (Foldable, foldl)
+import Control.MonadPlus (MonadPlus)
+import Control.Plus (empty)
 
--- TODO: these structures can be appended from the left; streams can only be appended from the right
-class (Foldable.Foldable t) <= Filterable t where
+class Consable t where
+  czero :: forall a. t a
+
+  -- TODO: laws
+  cons :: forall a. a -> t a -> t a
+
+class Filterable t where
   fzero :: forall a. t a
-  fcons :: forall a. a -> t a -> t a
 
--- filter (const false) == const fzero
--- filter (const true) == id
--- TODO: some relationship between `filter pred` and `filter (not pred)`
-filter :: forall t a. (Filterable t) => (a -> Boolean) -> t a -> t a
-filter pred = Foldable.foldl (\memo x -> if pred x then fcons x memo else memo) fzero
+  -- filter (const false) == const fzero
+  -- filter (const true) == id
+  -- filter pred == filter pred . filter pred
+  -- filter pred . filter (not pred) == filter (const false)
+  filter :: forall a. (a -> Boolean) -> t a -> t a
 
-instance filterableArray :: Filterable [] where
-  fzero = []
-  fcons = (:)
+instance foldableFilterable :: (Foldable t, Consable t) => Filterable t where
+  fzero = czero
+  filter pred = foldl (\memo x -> if pred x then cons x memo else memo) fzero
+
+instance monadPlusFilterable :: (MonadPlus t) => Filterable t where
+  fzero = empty
+  filter pred xs = do
+    x <- xs
+    if pred x then return x else fzero
