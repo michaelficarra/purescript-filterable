@@ -8,7 +8,8 @@ import Control.Plus (empty)
 class Consable t where
   czero :: forall a. t a
 
-  -- TODO: laws
+  -- cons a xs /= xs
+  -- cons a <<< cons a /= cons a
   cons :: forall a. a -> t a -> t a
 
 class Filterable t where
@@ -16,8 +17,8 @@ class Filterable t where
 
   -- filter (const false) == const fzero
   -- filter (const true) == id
-  -- filter pred == filter pred . filter pred
-  -- filter pred . filter (not pred) == filter (const false)
+  -- filter pred == filter pred <<< filter pred
+  -- filter pred <<< filter (not pred) == filter (const false)
   filter :: forall a. (a -> Boolean) -> t a -> t a
 
 instance foldableFilterable :: (Foldable t, Consable t) => Filterable t where
