@@ -1,6 +1,6 @@
-module Tests where
+module Test.Data.Filterable.Instances where
 
-import Prelude ((:), Ord)
+import Prelude ((:), Ord, return, unit)
 import Data.Filterable (Filterable, fzero, filter, Consable, czero, cons)
 
 import qualified Data.Set as Set

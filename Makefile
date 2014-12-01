@@ -2,54 +2,53 @@ default: build doc
 all: build doc test
 
 MODULE = Data.Filterable
-MODULE_PATH = ${MODULE//.//}
+OUT = lib
+TESTSOUT = built-tests
+MODULE_PATH = $(OUT)/$(MODULE)
 
-build: lib/$(MODULE_PATH).js
-build-tests: $(TESTSOUT)
-externs: lib/$(MODULE_PATH).externs.purs
+build: $(MODULE_PATH).js
+build-tests: $(TESTSOUT)/index.js
+externs: $(MODULE_PATH).externs.purs
 deps: node_modules bower_components
 doc: README.md
 
 BOWER_DEPS = $(shell find bower_components/purescript-*/src -name '*.purs' -type f | sort)
 SRC = $(shell find src -name '*.purs' -type f | sort)
 TESTS = $(shell [ -d test ] && find test -name '*.purs' -type f | sort)
-TESTSOUT = $(TESTS:test/%.purs=built-tests/%.js)
 
 BOWER = node_modules/.bin/bower
 ISTANBUL = node_modules/.bin/istanbul
-MOCHA = node_modules/.bin/_mocha
-MOCHA_OPTS = --inline-diffs --check-leaks --reporter dot
 NPM = $(shell command -v npm || { echo "npm not found."; exit 1; })
 PSC = $(shell command -v psc || { echo "PureScript compiler (psc) not found."; exit 1; })
 PSCDOCS = $(shell command -v psc-docs || command -v docgen)
 
-lib/$(MODULE_PATH).js: bower_components $(SRC)
+$(MODULE_PATH).js: bower_components $(SRC)
 	@mkdir -p '$(@D)'
 	$(PSC) --verbose-errors \
 	  --module $(MODULE) \
 	  --browser-namespace exports \
 	  $(BOWER_DEPS) $(SRC) \
-	  > lib/$(MODULE_PATH).js
+	  > $(MODULE_PATH).js
 
 .PHONY: default all build externs deps doc clean test build-tests
 
-lib/$(MODULE_PATH).externs.purs: bower_components $(SRC)
+$(MODULE_PATH).externs.purs: bower_components $(SRC)
 	@mkdir -p '$(@D)'
 	$(PSC) --verbose-errors \
 	  --module $(MODULE) \
 	  --codegen $(MODULE) \
-	  --externs lib/$(MODULE_PATH).externs.purs \
+	  --externs $(MODULE_PATH).externs.purs \
 	  $(BOWER_DEPS) $(SRC) \
 	  > /dev/null
 
-README.md: lib/$(MODULE_PATH).externs.purs
+README.md: $(MODULE_PATH).externs.purs
 	@mkdir -p '$(@D)'
-	$(PSCDOCS) lib/$(MODULE_PATH).externs.purs >'$@'
+	$(PSCDOCS) $(MODULE_PATH).externs.purs >'$@'
 
-built-tests/%.js: test/%.purs bower_components test-helper.purs
+$(TESTSOUT)/index.js: $(TESTS) $(SRC) bower_components
 	@mkdir -p '$(@D)'
-	$(PSC) --verbose-errors --module Tests \
-	  $(BOWER_DEPS) $(SRC) test-helper.purs '$<' \
+	$(PSC) --verbose-errors --module Main --main Main \
+	  $(BOWER_DEPS) $(SRC) $(TESTS) \
 	  >'$@'
 
 node_modules:
@@ -58,7 +57,8 @@ node_modules:
 bower_components: node_modules
 	$(BOWER) install
 
-test: node_modules $(TESTSOUT) lib/$(MODULE_PATH).js
-	[ -d test ] && $(ISTANBUL) cover --root lib $(MOCHA) -- $(MOCHA_OPTS) -- built-tests
+test: node_modules $(TESTSOUT)/index.js
+	[ -d test ] && $(ISTANBUL) cover --root $(TESTSOUT) -- $(TESTSOUT)/index.js
+
 clean:
-	rm -rf lib built-tests coverage bower_components node_modules
+	rm -rf $(OUT) $(TESTSOUT) coverage bower_components node_modules

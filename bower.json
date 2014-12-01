@@ -27,6 +27,7 @@
     "purescript-control": "~0.2.1"
   },
   "devDependencies": {
-    "purescript-sets": "~0.1.0"
+    "purescript-sets": "~0.1.0",
+    "purescript-quickcheck": "~0.3.1"
   }
 }
